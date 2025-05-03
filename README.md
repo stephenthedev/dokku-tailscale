@@ -16,6 +16,21 @@ Set an auth key or oauth client key to the global config:
 dokku config:set --global TS_AUTHKEY=tskey-client-00000000000000000-000000000000000000000000000000000
 ```
 
+&nbsp;
+
+_(Optional)_ Set login server url to the global config:
+
+```sh
+dokku config:set --global TS_LOGIN_SERVER=https://headscale.example.com
+```
+
+_(Optional)_ Set tailscale extra args to the global config:
+
+```sh
+# Example to force re-authentication
+dokku config:set --global TS_EXTRA_ARGS="--force-reauth"
+```
+
 Presently, all apps will be tagged in the tailnet with `dokku`.
 
 ## Usage
