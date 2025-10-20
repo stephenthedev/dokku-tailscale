@@ -38,5 +38,6 @@ fn-help-content() {
     tailscale:up <app>, Starts the tailscale machine with the name of the app
     tailscale:down <app>, Stops the tailscale sidecar
     tailscale:serve <app> [<port>|stop], Starts or stops serving the provided port over https
+    tailscale:funnel <app> [<port>|stop], Starts or stops exposing the provided port to the public internet
 help_content
 }

@@ -143,3 +143,43 @@ tailscale_serve_url() {
     echo $output | head -n 1 | cut -d ' ' -f 1 | tr -d '[:space:]'
   fi
 }
+
+tailscale_funnel_start() {
+  [[ -z "$APP" ]] && dokku_log_fail "Please specify an app to run the command on"
+  verify_app_name "$APP"
+
+  ( ! tailscale_is_enabled ) && dokku_log_fail "tailscale is not enabled for $APP"
+
+  # First enable funnel if not already enabled
+  dokku_log_info1 "enabling funnel for ${APP}"
+  "$DOCKER_BIN" exec "ts-${APP}" tailscale funnel --bg "$PORT"
+  dokku_log_info1 "started funnel for ${APP} :${PORT} -> public internet via https"
+  
+  # Get the funnel URL and display it
+  funnel_url=$(tailscale_funnel_url)
+  if [[ -n "$funnel_url" ]]; then
+    dokku_log_info1 "funnel URL: $funnel_url"
+  fi
+}
+
+tailscale_funnel_stop() {
+  [[ -z "$APP" ]] && dokku_log_fail "Please specify an app to run the command on"
+  verify_app_name "$APP"
+
+  ( ! tailscale_is_enabled ) && dokku_log_fail "tailscale is not enabled for $APP"
+
+  "$DOCKER_BIN" exec "ts-${APP}" tailscale funnel --https=443 off
+  dokku_log_info1 "stopped funnel for ${APP}"
+}
+
+tailscale_funnel_url() {
+  [[ -z "$APP" ]] && dokku_log_fail "Please specify an app to run the command on"
+  verify_app_name "$APP"
+
+  ( ! tailscale_is_enabled ) && return
+
+  output=$("$DOCKER_BIN" exec "ts-${APP}" tailscale funnel status 2>/dev/null)
+  if [[ "$(echo $output | tr -d '[:space:]')" != "Nofunnelconfig" ]] && [[ -n "$output" ]]; then
+    echo $output | head -n 1 | cut -d ' ' -f 1 | tr -d '[:space:]'
+  fi
+}
