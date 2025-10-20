@@ -9,4 +9,5 @@ declare APP="$1"
 if [[ -n "$(tailscale_is_running_for_app)" ]]; then
   echo "http://${APP}"
   tailscale_serve_url
+  tailscale_funnel_url
 fi

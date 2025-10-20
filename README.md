@@ -112,3 +112,33 @@ traffic over https:
 ```
 dokku tailscale:serve testing-traefik-on-dokku 8080
 ```
+
+#### Exposing to the public internet with Funnel
+
+If you want to make your app accessible from the public internet (not just your tailnet), you can use `tailscale funnel`. **Note: You must first run `tailscale:up` to enable tailscale for the app.**
+
+```sh
+# First, enable tailscale for the app
+dokku tailscale:up testing-traefik-on-dokku
+
+# Then enable funnel to expose it publicly
+dokku tailscale:funnel testing-traefik-on-dokku 8080
+```
+
+This will:
+- Enable Tailscale Funnel for your app
+- Expose the specified port to the public internet via HTTPS
+- Display the public funnel URL that anyone can access
+
+**Important notes about Funnel:**
+- Requires Tailscale v1.38.3 or later
+- Requires MagicDNS and HTTPS certificates enabled for your tailnet  
+- Only works on ports 443, 8443, and 10000
+- Traffic is subject to bandwidth limits
+- The tailscale container must remain running to keep the funnel active
+
+To stop the funnel:
+
+```sh
+dokku tailscale:funnel testing-traefik-on-dokku stop
+```

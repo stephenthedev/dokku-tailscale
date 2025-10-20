@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- `tailscale:funnel` command to expose apps to the public internet via Tailscale Funnel
+- `tailscale_funnel_start` and `tailscale_funnel_stop` functions
+- `tailscale_funnel_url` function to get the public funnel URL
+- Funnel URL display in `app-urls` output
+- Documentation and examples for Tailscale Funnel usage
 
 ## [0.1.1] - 2024-05-01
 ### Added

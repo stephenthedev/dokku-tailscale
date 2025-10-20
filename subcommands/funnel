@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+set -eo pipefail
+[[ $DOKKU_TRACE ]] && set -x
+
+source "$PLUGIN_AVAILABLE_PATH/tailscale/functions"
+
+cmd-tailscale-funnel() {
+  declare desc="expose the provided port to the public internet via tailscale funnel"
+  declare cmd="tailscale:funnel"
+  [[ "$1" == "$cmd" ]] && shift 1
+
+  declare APP="$1" PORT="$2"
+
+  if [[ "$PORT" == "stop" ]]; then
+    tailscale_funnel_stop
+  else
+    tailscale_funnel_start
+  fi
+}
+
+cmd-tailscale-funnel "$@"
